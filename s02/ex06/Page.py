@@ -158,27 +158,15 @@ class Page:
             'Text',
             'Div'
         }
-    # def __str__(self) -> str:
-    #     return self.el
+
+    def __str__(self) -> str:
+        doc = '<!DOCTYPE html>'
+        return doc + str(self.el)
 
     def is_valid(self):
-        option = {
-            'body': False,
-            'title': False,
-            'div': False,
-        }
-        if not self.is_head_body_valid() or not self.is_tag_valid(option):
-            return False
-        return True
+        return self.is_head_body_valid() and self.is_tag_valid()
 
-    def is_tag_valid(self, option) -> bool:
-        classname = self.el.__class__.__name__
-        if classname == 'Body':
-            option['body'] = True
-        if classname == 'Div':
-            option['div'] = True
-        if classname == 'Title' or classname == 'H1' or classname == 'H2' or classname == 'Li' or classname == 'Th' or classname == 'Td' or classname == 'Text':
-            option['title'] = True
+    def is_tag_valid(self) -> bool:
         for el in self.el.elms:
             cname = el.__class__.__name__
             if cname not in self.__valid_tag:
@@ -198,7 +186,7 @@ class Page:
             if cname == 'Tr' and not self.is_some_thd(el.elms):
                 return False
             if len(el.elms) > 0:
-                if not Page(el).is_tag_valid(option):
+                if not Page(el).is_tag_valid():
                     return False
         return (True)
     
