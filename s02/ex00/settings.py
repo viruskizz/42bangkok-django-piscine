@@ -1,0 +1,5 @@
+name = "Araiva"
+firstname = "Thitiwut"
+lastname = "Somsa"
+age =" 36"
+profession = "javascript, c"

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web page replicating</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        p[data-value="80"] {
+            width: 80%;
+        }
+
+        p[data-value="60"] {
+            width: 60%;
+        }
+
+        p[data-value="50"] {
+            width: 50%;
+        }
+
+        p[data-value="75"] {
+            width: 75%;
+        }
+
+        p[data-value="65"] {
+            width: 65%;
+        }
+
+        [data-value="35"] {
+            width: 35%;
+        }
+    </style>
+</head>
+
+<body>
+    <li>
+        <h2>Frontend</h2>
+
+        <p data-value="80">HTML5</p>
+        <progress value="80" max="100" class="progress-bar html5">
+        </progress>
+
+        <p data-value="60">CSS3</p>
+        <progress value="60" max="100" class="progress-bar html5">
+        </progress>
+
+        <p data-value="50">JQuery</p>
+        <progress value="50" max="100" class="progress-bar html5">
+        </progress>
+    </li>
+    <li>
+        <h2>Backend</h2>
+
+        <p data-value="75">Python</p>
+        <progress value="75" max="100" class="progress-bar python">
+        </progress>
+
+        <p data-value="65">PHP</p>
+        <progress value="65" max="100" class="progress-bar python">
+        </progress>
+
+        <p data-value="35">Node.js</p>
+        <progress value="35" max="100" class="progress-bar python">
+        </progress>
+    </li>
+</body>
+
+</html>

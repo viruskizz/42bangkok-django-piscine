@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Sending Form</title>
+  <style>
+    div {
+      margin: 2px;
+    }
+  </style>
+  <script src="popup.js"></script>
+</head>
+
+<body>
+  <form id="form" onsubmit="(e) => {e.preventDefault()}">
+    <div>
+      <label for="firstname">Firstname:</label>
+      <input type="text" name="firstname" id="firstname">
+    </div>
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" name="name" id="name">
+    </div>
+    <div>
+      <label for="age">Age:</label>
+      <input type="number" name="age" id="age">
+    </div>
+    <div>
+      <label for="phone">Phone:</label>
+      <input type="tel" name="phone" id="phone">
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email">
+    </div>
+    <div>
+      <label for="student">Student at 42 ?:</label>
+      <input type="checkbox" name="student" id="student">
+    </div>
+    <div>
+      <input type="radio" name="gender" id="gender_male" value="Male">
+      <label for="gender_male">Male</label>
+      <input type="radio" name="gender" id="gender_female" value="Female">
+      <label for="gender_female">Female</label>
+      <input type="radio" name="gender" id="gender_other" value="Other">
+      <label for="gender_other">Other</label>
+    </div>
+    <div>
+      <button type="button" onclick="displayFormContents(event)">Run that sexy Javascript!</button>
+    </div>
+  </form>
+</body>
+
+</html>
