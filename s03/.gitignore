@@ -1,5 +1,9 @@
 test*
 __pycache__
+local_lib
+
 ex01/pip_install.log
-ex01/local_lib
 ex01/
+ex02/*.wiki
+ex04/django_venv
+ex05/django_venv

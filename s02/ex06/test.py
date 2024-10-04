@@ -46,8 +46,7 @@ if __name__ == '__main__':
         page = Page(html)
         valid = page.is_valid()
         print(valid)
-        # print(page)
+        print(page)
         print(Page([Head(), Body()]).is_valid())
         page.write_to_file("index.html")
-    # except Exception as e:
-    #     print(e)
+        print("True:", Page(Html([Head(Title(Text('title'))), Body()])).is_valid())
