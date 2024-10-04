@@ -14,29 +14,37 @@ capital_cities = {
     "CO": "Denver"
 }
 
-def getKeyFromVal(input, obj):
-    for key, val in obj.items():
-        if val.lower() == input.lower():
-            return key
+def getCityFromState(capital_map, find):
+    for state, city in capital_map.items():
+        if state.lower() == find.lower():
+            return city
 
-def getStateFromCity(city):
-    st = getKeyFromVal(city, capital_cities)
-    if not st:
-        return
-    state = getKeyFromVal(st, states)
-    return state
+def getStateFromCity(capital_map, find):
+    for state, city in capital_map.items():
+        if city.lower() == find.lower():
+            return state
+
+def map_states_cities():
+    map = {}
+    for state, short in states.items():
+        city = capital_cities[short]
+        map[state] = city
+    return map
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit(0)
     input = sys.argv[1]
     inputs = [s.strip() for s in input.split(",")]
-    # inputs.reverse()
-    for str in inputs:
-        if not str:
+    capital_map = map_states_cities()
+    for s in inputs:
+        if not s:
             continue
-        state = getStateFromCity(str)
+        state = getStateFromCity(capital_map, s)
+        city = getCityFromState(capital_map, s)
         if state:
-            print(f'{str.capitalize()} is the capital of {state}')
-        elif str.title() not in states:
-            print(f'{str} is neither a capital city nor a state')
+            print(f'{s.capitalize()} is the capital of {state}')
+        elif city:
+            print(f'{city} is a capital of {s}')
+        else:
+            print(f'{s} is neither a capital city nor a state')

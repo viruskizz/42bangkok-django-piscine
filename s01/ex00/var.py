@@ -1,6 +1,6 @@
 def my_var():
     num = 42
-    str = '42'
+    s = '42'
     deux = 'quarante-deux'
     digit = 42.0
     iss = True
@@ -9,7 +9,7 @@ def my_var():
     tu = (42,)
     se = set()
     print("42 has a type", type(num))
-    print(f'{str} has a type {type(str)}')
+    print(f'{s} has a type {type(s)}')
     print(f'{deux} has a type {type(deux)}')
     print(f'{digit} has a type {type(digit)}')
     print(f'{iss} has a type {type(iss)}')
