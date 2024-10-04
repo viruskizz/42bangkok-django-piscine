@@ -117,9 +117,13 @@ class Br(Elem):
     def __init__(self, elms=[], name: str = "br", attrs: dict[str, str] = {}, is_simple: bool = True):
         super().__init__(elms, name, attrs, is_simple)
 
-class Text(Elem):
-    def __init__(self, elms=[], name: str = "text", attrs: dict[str, str] = {}, is_simple: bool = True):
-        super().__init__(elms, name, attrs, is_simple)
+class Text():
+    def __init__(self, text = ""):
+        self.text = text
+        self.elms=[]
+    
+    def __str__(self) -> str:
+        return self.text
 
 class Page:
     def __init__(self, el: Elem) -> None:
@@ -147,89 +151,91 @@ class Page:
             'Dr',
             'Text'
         }
-        self.__valid_div = {
-            'H1',
-            'H2',
-            'Div',
-            'Table',
-            'Ul',
-            'Ol',
-            'Span',
-            'Text',
-            'Div'
-        }
 
     def __str__(self) -> str:
         doc = '<!DOCTYPE html>'
         return doc + str(self.el)
 
     def is_valid(self):
-        return self.is_head_body_valid() and self.is_tag_valid()
+        if self.el.__class__.__name__ != 'Html':
+            return False
+        if not self.__is_head_body(self.el.elms):
+            return False
+        return self.__is_tag_valid()
 
-    def is_tag_valid(self) -> bool:
+    def write_to_file(self, filename):
+        f = open(filename, "w")
+        f.write(str(self))
+        f.close()
+
+
+    def __is_tag_valid(self) -> bool:
         for el in self.el.elms:
             cname = el.__class__.__name__
             if cname not in self.__valid_tag:
                 return False
-            if (cname == 'Body' or cname == 'Div') and not self.is_valid_div(el.elms):
+            if (cname == 'Body' or cname == 'Div') and not self.__is_valid_div(el.elms):
+                print("Invalid: Body and Div")
                 return False
-            if cname == 'Title' and el.elms and len(el.elms) != 1 and el.elm[0].__class_.__name__ == 'Text':
+            if cname == 'Head' and not self.__is_only_title(el.elms):
+                print("Invalid: Head")
                 return False
-            if cname == 'P' and not self.is_only_text(el.elms):
+            if cname in {'Title', 'H1', 'H2', 'Li', 'Th', 'Td'} and not self.__is_single_text(el.elms):
+                print(f'Invalid: {cname} need only single Text')
                 return False
-            if cname == 'Span' and not self.is_only_ptext(el.elms):
+            if cname == 'P' and not self.__is_only_text(el.elms):
+                print("Invalid: P")
                 return False
-            if (cname == 'Ul' or cname == 'Ol') and not self.is_some_li(el.elms):
+            if cname == 'Span' and not self.__is_only_ptext(el.elms):
                 return False
-            if cname == 'Table' and not self.is_some_tr(el.elms):
+            if (cname == 'Ul' or cname == 'Ol') and not self.__is_some_li(el.elms):
                 return False
-            if cname == 'Tr' and not self.is_some_thd(el.elms):
+            if cname == 'Table' and not self.__is_some_tr(el.elms):
+                return False
+            if cname == 'Tr' and not self.__is_some_thd(el.elms):
                 return False
             if len(el.elms) > 0:
-                if not Page(el).is_tag_valid():
+                if not Page(el).__is_tag_valid():
                     return False
         return (True)
-    
-    def is_head_body_valid(self) -> bool:
-        if self.el.__class__.__name__ != 'Html':
-            return False
-        elms = self.el.elms
-        if len(elms) != 2 or \
-            elms[0].__class__.__name__ != 'Head' or \
-            elms[1].__class__.__name__ != 'Body':
-            return False
-        if not self.is_only_title(elms[0].elms):
-            return False
-        return True
 
-    def is_only_title(self, elms) -> bool:
-        count = 0
+    def __is_head_body(self, elms) -> bool:
+        if len(elms) != 2:
+            return False
+        return elms[0].__class__.__name__ == 'Head' and elms[1].__class__.__name__ == 'Body'
+
+    def __is_only_title(self, elms) -> bool:
+        return elms and len(elms) == 1 and elms[0].__class__.__name__ == 'Title'
+
+    def __is_valid_div(self, elms) -> bool:
+        valid_div = {'H1','H2','Div','Table','Ul','Ol','Span','Text','Div'}
         for el in elms:
-            if el.__class__.__name__ == 'Title':
-                count += 1
-        if count != 1:
-            return False
+            if el.__class__.__name__ not in valid_div:
+                return False
         return True
 
-    def is_only_text(self, elms) -> bool:
+    def __is_single_text(self, elms) -> bool:
+        return len(elms) == 1 and elms[0].__class__.__name__ == 'Text'
+
+    def __is_only_text(self, elms) -> bool:
         for el in elms:
             if el.__class__.__name__ != 'Text':
                 return False
         return True
 
-    def is_only_ptext(self, elms) -> bool:
+    def __is_only_ptext(self, elms) -> bool:
         for el in elms:
             if el.__class__.__name__ != 'Text' and el.__class__.__name__ != 'P':
                 return False
         return True
     
-    def is_some_li(self, elms) -> bool:
+    def __is_some_li(self, elms) -> bool:
         for el in elms:
             if el.__class__.__name__ != 'Li':
                 return False
         return len(elms) >= 1
 
-    def is_some_thd(self, elms) -> bool:
+    def __is_some_thd(self, elms) -> bool:
         if len(elms) == 0:
             return False
         cur = elms[0].__class__.__name__
@@ -240,14 +246,8 @@ class Page:
                 return False
         return True
 
-    def is_some_tr(self, elms) -> bool:
+    def __is_some_tr(self, elms) -> bool:
         for el in elms:
             if el.__class__.__name__ != 'Tr':
-                return False
-        return True
-
-    def is_valid_div(self, elms) -> bool:
-        for el in elms:
-            if el.__class__.__name__ not in self.__valid_div:
                 return False
         return True
