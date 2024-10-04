@@ -1,2 +1,5 @@
 test*
 __pycache__
+ex01/pip_install.log
+ex01/local_lib
+ex01/
