@@ -2,8 +2,9 @@ class Elem:
     def __init__(self, elms=[], name: str = "element", attrs: dict[str, str] = {}, is_simple: bool = False):
         self.name = name
         if not isinstance(elms, list):
-            raise self.ElemException("Elements type is not list")
-        self.elms = elms
+            self.elms = [elms]
+        else:
+            self.elms = elms
         attributes = ''
         for key,val in attrs.items():
             attributes += f' {key}="{val}"'
