@@ -4,8 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ex00: Markdown Cheatsheet</title>
+    <style>
+        div {
+            margin-bottom: 20px
+        }
+        table {
+            align-self: center;
+            border-collapse: collapse;
+        }
+        table tr td,th {
+            text-align: center;
+            border: 1px solid black;
+            padding: 8px 16px;
+        }
+    </style>
 </head>
 <body>
-    
+    <h1>Markdown Guide</h1>
+    {% for tag, value in tags.items %}
+    <div>
+        <h2>{{ tag | title }}</h2>
+        <p>{{ value.description }}</p>
+        {% if value.details %}
+            <table>
+                <tr>
+                    <th>Markdown</th>
+                    <th>HTML</th>
+                    <th>Render Output</th>
+                </tr>
+                {% for d in value.details %}
+                    <tr>
+                        <td>{{ d.title }}</td>
+                        <td>{{ d.example }}</td>
+                        <td>{{ d.example | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+    {% endfor %}
 </body>
 </html>
