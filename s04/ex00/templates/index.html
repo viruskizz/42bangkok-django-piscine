@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ex00: Markdown Cheatsheet</title>
     <style>
+        body {
+            margin: 20px
+        }
         div {
-            margin-bottom: 20px
+            margin: 20px 10px
         }
         table {
             align-self: center;
             border-collapse: collapse;
         }
         table tr td,th {
-            text-align: center;
             border: 1px solid black;
             padding: 8px 16px;
         }
@@ -34,7 +36,7 @@
                 </tr>
                 {% for d in value.details %}
                     <tr>
-                        <td>{{ d.title }}</td>
+                        <td>{{ d.title | safe }}</td>
                         <td>{{ d.example }}</td>
                         <td>{{ d.example | safe }}</td>
                     </tr>

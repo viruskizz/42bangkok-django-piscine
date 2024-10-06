@@ -46,11 +46,11 @@ def index(request):
                 'description': 'Alternatively, on the line below the text, add any number of == characters for heading level 1 or -- characters for heading level 2.',
                 'details': [
                     {
-                        'title': 'Heading level 1 \n===============',
+                        'title': 'Heading level 1 </br>===============',
                         'example': '<h1>Heading level 1</h1>',
                     },
                     {
-                        'title': 'Heading level 2 \n===============',
+                        'title': 'Heading level 2 </br>===============',
                         'example': '<h1>Heading level 2</h1>',
                     }
                 ]
