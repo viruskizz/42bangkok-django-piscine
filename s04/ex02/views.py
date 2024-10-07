@@ -37,7 +37,6 @@ class HistoryForm(forms.Form):
 def index(request):
     data = read_data()
     if request.method == "POST":
-        print(request)
         form = HistoryForm(request.POST)
         now = datetime.now()
         dt = now.isoformat()
@@ -45,8 +44,6 @@ def index(request):
         save_file(data)
         if form.is_valid():
             return render(request, "ex02/index.html", {"form": form, "data": data})
-
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = HistoryForm()
         return render(request, "ex02/index.html", {"form": form, "data": data})
