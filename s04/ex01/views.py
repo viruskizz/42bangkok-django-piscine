@@ -4,11 +4,11 @@ from datetime import datetime
 # Create your views here.
 def django(request):
     context = {}
-    return render(request, 'django.html', context)
+    return render(request, 'ex01/django.html', context)
 
 def display(request):
     context = {}
-    return render(request, 'display.html', context)
+    return render(request, 'ex01/display.html', context)
 
 def templates(request):
     context = {
@@ -36,4 +36,4 @@ def templates(request):
         ],
         'imgUrl': 'images/example.png'
     }
-    return render(request, 'templates.html', context)
+    return render(request, 'ex01/templates.html', context)

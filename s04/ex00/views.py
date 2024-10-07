@@ -57,4 +57,4 @@ def index(request):
             }
         }
     }
-    return render(request, 'index.html', context)
+    return render(request, 'ex00/index.html', context)
