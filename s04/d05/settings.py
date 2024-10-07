@@ -135,3 +135,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 APPEND_SLASH=True
+
+EX02_LOG_FILE = "ex02/static/history.log"

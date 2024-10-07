@@ -3,13 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>History Form</title>
 </head>
 <body>
-    <form action="/your-name/" method="post">
-        <label for="your_name">Your name: </label>
-        <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
-        <input type="submit" value="OK">
-    </form>
+    <div class="container">
+        <div class="card p-3">
+            <h3>Input History Record</h3>
+            <form action="{% url 'index' %}" method="post">
+                {{ form }}
+                <input type="submit" value="OK" class="btn btn-success">
+                {% csrf_token %}
+            </form>
+        </div>
+        <div class="mb-3 mt-3"></div>
+        <div class="card p-4">
+            <h3>Histories</h3>
+            {% if data.items|length > 0 %}
+            <table>
+                <tr>
+                    <th>Datetime</th>
+                    <th>Description</th>
+                </tr>
+                {% for timestamp, record in data.items %}
+                <tr>
+                    <td>{{timestamp}}</td>
+                    <td>{{record}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
