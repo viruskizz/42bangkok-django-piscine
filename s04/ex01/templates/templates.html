@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Ex01: Template engine. {% endblock %}
+
+{% block style %}
+    <link href="{% static 'css/style2.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div>
+    <h1>
+        {{ title }}
+    </h1>
+    <div class="card p-3 mb-4">
+        <h2>Block and context variable</h2>
+        <pre>{{ code_var }}</pre>
+        <h3>Output</h3>
+        <img src="{% static imgUrl %}" width="720" alt="My image">
+    </div>
+    <div class="card p-3 mb-4">
+        <h2>If condition</h2>
+        <pre>{{ code_if }}</pre>
+        <h3>Output</h3>
+        {% if timer.second|divisibleby:2 %}
+            <p><b style="color: green">{{timer.isoformat}}</b></p>
+        {% else %}
+            <p><b style="color: red">{{timer.isoformat}}</b></p>
+        {% endif %}
+    </div>
+    <div class="card p-3 mb-4">
+        <h2>For block</h2>
+        <h3>Code:</h3>
+        <pre>{{ code_for }}</pre>
+        <h3>Output</h3>
+        <ul>
+            {% for serie in series %}
+                <li>{{serie}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

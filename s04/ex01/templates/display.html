@@ -1,2 +1,15 @@
+{% extends 'base.html' %}
 {% load static %}
-<img src="{% static 'ex01/example.png' %}" alt="My image">
+
+{% block title %} Ex01: Display process of a static page. {% endblock %}
+
+{% block content %}
+
+<div>
+    <h1>
+        Load Static file example
+    </h1>
+    <img src="{% static 'images/example.png' %}" width="720" alt="My image">
+</div>
+
+{% endblock %}
