@@ -11,5 +11,4 @@ def index(request):
             'b': f'background-color: rgb(0, 0, {cc})',
             'a': f'background-color: rgb({cc}, {cc}, {cc})',
         })
-
     return render(request, "ex03/index.html", {"shades": shades})

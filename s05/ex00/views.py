@@ -17,7 +17,7 @@ def init(request):
         cur = conn.cursor() 
         cur.execute("""
 CREATE TABLE IF NOT EXISTS ex00_movies (
-    title varchar(64) NOT NULL,
+    title varchar(64) NOT NULL UNIQUE,
     episode_nb serial PRIMARY KEY,
     opening_crawl text,
     director varchar(32) NOT NULL,
@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS ex00_movies (
 """
         )
         conn.commit()
-        # print("Curr:", curs)
+        cur.close()
+        conn.close()
     except Exception as e:
         print("Error:", e)
         message = e
