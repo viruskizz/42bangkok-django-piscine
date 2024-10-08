@@ -1,12 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-
-from django.db import connection
-
-def table_exists(table_name: str) -> bool:
-    tables = connection.introspection.table_names()
-    print('Tables:', tables)
-    return table_name in tables
+import psycopg2
 
 # to run create new table
 # python3 manage.py makemigrations
@@ -14,8 +8,27 @@ def table_exists(table_name: str) -> bool:
 # python3 manage.py runserver
 # 
 def init(request):
-    # model =
-    message = 'OK'
-    if not table_exists('ex00_movies'):
-        message = 'Error: Table could not created.'
+    message = "OK"
+    db = "djangotraining"
+    username = "djangouser"
+    password = "secret"
+    try:
+        conn = psycopg2.connect(f"dbname='{db}' user='{username}' host='127.0.0.1' password='{password}'")
+        cur = conn.cursor() 
+        cur.execute("""
+CREATE TABLE IF NOT EXISTS ex00_movies (
+    title varchar(64) NOT NULL,
+    episode_nb serial PRIMARY KEY,
+    opening_crawl text,
+    director varchar(32) NOT NULL,
+    producer varchar(128) NOT NULL,
+    release_date date NOT NULL
+)
+"""
+        )
+        conn.commit()
+        # print("Curr:", curs)
+    except Exception as e:
+        print("Error:", e)
+        message = e
     return HttpResponse(message)
