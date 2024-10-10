@@ -1,8 +1,5 @@
 # blog/forms.py
-from typing import Any, Mapping
 from django import forms
-from django.forms.renderers import BaseRenderer
-from django.forms.utils import ErrorList
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -34,15 +31,13 @@ def get_all_movies():
 
 # https://forum.djangoproject.com/t/use-form-init-value/24961/2
 class MovieListForm(forms.Form):
-    title = forms.ChoiceField(
-            label='Title')
+    title = forms.ChoiceField(label='Title')
     class Meta:
         fields = ('title')
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         movies = get_all_movies()
-        print('init')
         titles = [(m['title'], m['title']) for m in movies]
         self.fields['title'].choices = titles
 
