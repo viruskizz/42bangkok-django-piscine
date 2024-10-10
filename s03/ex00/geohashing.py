@@ -26,5 +26,8 @@ if __name__ == '__main__':
         print(f'Latitude {lat} is not in range -90.0 to 90.0')
     if long < -180.0 or lat > 180.0:
         print(f'Longitude {lat} is not in range -90.0 to 90.0')
-    hash = geohashing(lat, long)
-    print(f'Geohash: {hash}')
+    try:
+        hash = geohashing(lat, long)
+        print(f'Geohash: {hash}')
+    except Exception as e:
+        print(e)
