@@ -10,7 +10,7 @@
     <div class="container">
         <div class="card p-3">
             <h3>Input History Record</h3>
-            <form action="{% url 'index' %}" method="post">
+            <form action="/ex02/" method="post">
                 {{ form }}
                 <input type="submit" value="OK" class="btn btn-success">
                 {% csrf_token %}

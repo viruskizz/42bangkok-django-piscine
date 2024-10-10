@@ -10,7 +10,8 @@ LOG_FILE = "ex02/history.log"
 def read_data() -> dict:
     data = {}
     filename = settings.EX02_LOG_FILE or LOG_FILE
-    if not os.path.exists(os.path.dirname(filename)):
+    print(filename)
+    if not os.path.isfile(filename):
         return data
     with open(filename, "r") as f:
         lines = f.readlines()

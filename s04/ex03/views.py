@@ -4,7 +4,7 @@ from django.shortcuts import render
 def index(request):
     shades = []
     for c in [x * 5.2 for x in range(50)]:
-        cc = round(c)
+        cc = 255 - round(c)
         shades.append({
             'r': f'background-color: rgb({cc}, 0, 0)',
             'g': f'background-color: rgb(0, {cc}, 0)',

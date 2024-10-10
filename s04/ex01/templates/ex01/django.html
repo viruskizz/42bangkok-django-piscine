@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ex01: Django, framework web.</title>
-</head>
-<body>
+{% extends 'ex01/base.html' %}
+{% load static %}
+
+{% block title %} Ex01: Display process of a static page. {% endblock %}
+
+{% block content %}
+
     <h1>Django (web framework)</h1>
     <div>
     <h2>About</h2>
@@ -27,5 +26,5 @@
             In June 2008, it was announced that a newly formed Django Software Foundation (DSF) would maintain Django in the future.[19]
         </p>
     </div>
-</body>
-</html>
+
+{% endblock %}
