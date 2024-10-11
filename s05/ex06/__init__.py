@@ -1,8 +1,6 @@
 import psycopg2
 __all__ = ["connect", "exec_commands"]
 
-TABLE_NAME = "ex06_movies"
-
 def connect():
     db = "djangotraining"
     username = "djangouser"

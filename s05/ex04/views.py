@@ -1,94 +1,54 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
-import psycopg2
-from psycopg2.extras import RealDictCursor
-from django.urls import reverse
 
+from .models import MovieModel
 from .form import MovieListForm
-
-TABLE_NAME = "ex04_movies"
-
-def connect():
-    db = "djangotraining"
-    username = "djangouser"
-    password = "secret"
-    conn = psycopg2.connect(f"dbname='{db}' user='{username}' host='127.0.0.1' password='{password}'")
-    return conn
 
 # Create your views here.
 def init(request):
     try:
-        conn = connect()
-        cur = conn.cursor()
-        cur.execute(f"""
-            CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
-                title varchar(64) NOT NULL UNIQUE,
-                episode_nb serial PRIMARY KEY,
-                opening_crawl text,
-                director varchar(32) NOT NULL,
-                producer varchar(128) NOT NULL,
-                release_date date NOT NULL
-            )
-            """)
-        conn.commit()
-        cur.close()
-        conn.close()
+        MovieModel().setup()
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
 
 def populate(request):
+    data = [
+        {'episode_nb': 1, 'title': 'The Phantom Menace', 'director': 'George Lucas', 'producer': 'Rick McCallum', 'release_date': '1999-05-19'},
+        {'episode_nb': 2, 'title': 'Attack of the Clones', 'director': 'George Lucas', 'producer': 'Rick McCallum', 'release_date': '2002-05-16'},
+        {'episode_nb': 3, 'title': 'Revenge of the Sith', 'director': 'George Lucas', 'producer': 'Rick McCallum', 'release_date': '2005-05-19'},
+        {'episode_nb': 4, 'title': 'A New Hope', 'director': 'George Lucas', 'producer': 'Gary Kurtz, Rick McCallum', 'release_date': '1977-05-25'},
+        {'episode_nb': 5, 'title': 'The Empire Strikes Back', 'director': 'Irvin Kershner', 'producer': 'Gary Kurtz, Rick McCallum', 'release_date': '1980-05-17'},
+        {'episode_nb': 6, 'title': 'Return of the Jedi', 'director': 'Richard Marquand', 'producer': 'Howard G. Kazanjian, George Lucas, Rick McCallum', 'release_date': '1983-05-25'},
+        {'episode_nb': 7, 'title': 'The Force Awakens', 'director': 'J. J. Abrams', 'producer': 'Kathleen Kennedy, J. J. Abrams, Bryan Burk', 'release_date': '2015-12-11'}
+    ]
     try:
-        conn = connect()
-        cur = conn.cursor()
-        cur.execute(f"""
-            INSERT INTO {TABLE_NAME} (episode_nb, title, director, producer, release_date) 
-            VALUES
-                (1, 'The Phantom Menace', 'George Lucas', 'Rick McCallum', '1999-05-19'),
-                (2, 'Attack of the Clones', 'George Lucas', 'Rick McCallum', '2002-05-16'),
-                (3, 'Revenge of the Sith', 'George Lucas', 'Rick McCallum', '2005-05-19'),
-                (4, 'A New Hope', 'George Lucas', 'Gary Kurtz, Rick McCallum', '1977-05-25'),
-                (5, 'The Empire Strikes Back', 'Irvin Kershner', 'Gary Kurtz, Rick McCallum', '1980-05-17'),
-                (6, 'Return of the Jedi', 'Richard Marquand', 'Howard G. Kazanjian, George Lucas, Rick McCallum', '1983-05-25'),
-                (7, 'The Force Awakens', 'J. J. Abrams', ' Kathleen Kennedy, J. J. Abrams, Bryan Burk', '2015-12-11')
-            """)
-        conn.commit()
-        cur.close()
-        conn.close()
+        MovieModel().bulk_insert(data)
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
 
 def display(request):
     try:
-        conn = connect()
-        cur = conn.cursor()
-        cur.execute(f"SELECT * FROM {TABLE_NAME}")
-        rows = cur.fetchall()
-        conn.commit()
-        cur.close()
-        conn.close()
-        return render(request, "ex04/display.html", {"rows": rows})
+        movies = MovieModel().list()
+        return render(request, "ex04/display.html", {"movies": movies})
     except Exception as e:
-        return render(request, "ex04/display.html", {"rows": []})
+        return HttpResponse(e)
 
-def remove(request, context={}):
-    form = MovieListForm()
-    if request.method == "POST":
-        form = MovieListForm(request.POST)
-        title = form['title'].value()
-        conn = connect()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute(f"SELECT * FROM {TABLE_NAME} WHERE \"title\" = '{title}' limit 1")
-        row = cur.fetchone()
-        print(row)
-        selected = dict(row) if row else ""
-        cur.execute(f"DELETE FROM {TABLE_NAME} WHERE \"title\" = '{title}'")
-        conn.commit()
-        cur.close()
-        conn.close()
-        print(selected)
-        if form.is_valid():
-            newform = MovieListForm()
-            return render(request, "ex04/remove.html", {"form": newform,"record": selected})
-    return render(request, "ex04/remove.html", {"form": form, "record": ""})
+def remove(request):
+    try:
+        form = MovieListForm()
+        moviesCount = len(MovieModel().list())
+        selected = ""
+        if request.method == "POST":
+            form = MovieListForm(request.POST)
+            title = form['title'].value()
+            selected = MovieModel().get({'title': title})
+            if form.is_valid():
+                model = MovieModel()
+                model.remove({'title': title})
+                moviesCount -= 1
+                form = MovieListForm()
+        return render(request, "ex04/remove.html", {"form": form, "moviesCount": moviesCount ,"record": selected})
+    except Exception as e:
+        return HttpResponse(e)
