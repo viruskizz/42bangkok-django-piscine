@@ -2,54 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import MovieModel
-from . import connect, exec_commands, TABLE_NAME
 from .form import MovieListForm, MovieUpdateForm
 
 # Create your views here.
 def init(request):
     try:
-        exec_commands([
-            f"""
-            CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
-                title VARCHAR(64) NOT NULL UNIQUE,
-                episode_nb SERIAL PRIMARY KEY,
-                opening_crawl TEXT,
-                director VARCHAR(32) NOT NULL,
-                producer VARCHAR(128) NOT NULL,
-                release_date DATE NOT NULL,
-                created TIMESTAMP NOT NULL,
-                updated TIMESTAMP NOT NULL
-            )
-            """,
-            ## Add created field before insert record
-            f"""
-            CREATE OR REPLACE FUNCTION create_changetimestamp_column()
-            RETURNS TRIGGER AS $$
-            BEGIN
-                NEW.created = now();
-                NEW.updated = now();
-                RETURN NEW;
-            END
-            $$ language 'plpgsql';
-            CREATE TRIGGER create_changetimestamp_column BEFORE INSERT
-            ON {TABLE_NAME} FOR EACH ROW EXECUTE PROCEDURE
-            create_changetimestamp_column();
-            """,
-            ## Add updated field before update record
-            f"""
-            CREATE OR REPLACE FUNCTION update_changetimestamp_column()
-            RETURNS TRIGGER AS $$
-            BEGIN
-                NEW.updated = now();
-                NEW.created = OLD.created;
-                RETURN NEW;
-            END;
-            $$ language 'plpgsql';
-            CREATE TRIGGER update_films_changetimestamp BEFORE UPDATE
-            ON {TABLE_NAME} FOR EACH ROW EXECUTE PROCEDURE
-            update_changetimestamp_column();
-            """
-        ])
+        MovieModel().setup()
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
