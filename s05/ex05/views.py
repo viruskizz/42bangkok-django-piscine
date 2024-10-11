@@ -27,19 +27,25 @@ def populate(request):
 def display(request):
     try:
         movies = list(Movies.objects.all().values())
+        print(movies)
         return render(request, "ex05/display.html", {"movies": movies})
     except Exception as e:
-        return render(request, "ex05/display.html", {"movies": []})
+        return HttpResponse(e)
     
 def remove(request):
-    form = MovieListForm()
-    if request.method == "POST":
-        form = MovieListForm(request.POST)
-        title = form['title'].value()
-        record = Movies.objects.filter(title=title)
-        selected = dict(record.values()[0])
-        if form.is_valid():
-            record.delete()
-            newform = MovieListForm()
-            return render(request, "ex05/remove.html", {"form": newform, "selected": selected})
-    return render(request, "ex05/remove.html", {"form": form, "selected": ""})
+    try:
+        selected = ""
+        moviesCount = Movies.objects.count()
+        form = MovieListForm()
+        if request.method == "POST":
+            form = MovieListForm(request.POST)
+            title = form['title'].value()
+            record = Movies.objects.filter(title=title)
+            selected = Movies.objects.get(title=title)
+            if form.is_valid():
+                record.delete()
+                moviesCount -= 1
+                form = MovieListForm()
+        return render(request, "ex05/remove.html", {"form": form, "moviesCount": moviesCount, "selected": selected})
+    except Exception as e:
+        return HttpResponse(e)

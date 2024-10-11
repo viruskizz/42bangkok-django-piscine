@@ -2,7 +2,10 @@ from django import forms
 from .models import Movies
 
 class MovieListForm(forms.Form):
-    title = forms.ChoiceField(label='Title')
+    title = forms.ChoiceField(
+        label='Title',
+        widget=forms.Select(attrs={'class': 'form-control mb-2'})    
+    )
     class Meta:
         fields = ('title')
 
