@@ -27,7 +27,6 @@ def populate(request):
 def display(request):
     try:
         movies = list(Movies.objects.all().values())
-        print(movies)
         return render(request, "ex05/display.html", {"movies": movies})
     except Exception as e:
         return HttpResponse(e)

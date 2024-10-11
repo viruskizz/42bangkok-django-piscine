@@ -27,4 +27,4 @@ def display(request):
         movies = list(Movies.objects.all().values())
         return render(request, "ex03/display.html", {"movies": movies})
     except Exception as e:
-        return render(request, "ex03/display.html", {"movies": []})
+        return HttpResponse(e)
