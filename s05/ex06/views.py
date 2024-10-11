@@ -73,31 +73,40 @@ def populate(request):
 def display(request):
     try:
         movies = MovieModel().list()
-        return render(request, "ex06/display.html", {"rows": movies})
+        return render(request, "ex06/display.html", {"movies": movies})
     except Exception as e:
-        return render(request, "ex06/display.html", {"rows": []})
+        return HttpResponse(e)
 
 def remove(request):
-    form = MovieListForm()
-    selected = ""
-    if request.method == "POST":
-        form = MovieListForm(request.POST)
-        title = form['title'].value()
-        selected = MovieModel().get({'title': title})
-        if form.is_valid():
-            model = MovieModel()
-            model.remove({'title': title})
-            form = MovieListForm()
-    return render(request, "ex06/remove.html", {"form": form,"record": selected})
+    try:
+        form = MovieListForm()
+        moviesCount = len(MovieModel().list())
+        selected = ""
+        if request.method == "POST":
+            form = MovieListForm(request.POST)
+            title = form['title'].value()
+            selected = MovieModel().get({'title': title})
+            if form.is_valid():
+                model = MovieModel()
+                model.remove({'title': title})
+                moviesCount -= 1
+                form = MovieListForm()
+        return render(request, "ex06/remove.html", {"form": form, "moviesCount": moviesCount ,"record": selected})
+    except Exception as e:
+        return HttpResponse(e)
 
 def update(request):
-    form = MovieUpdateForm()
-    if request.method == "POST":
-        form = MovieUpdateForm(request.POST)
-        model = MovieModel()
-        title = form['title'].value()
-        description = form['description'].value()
-        if form.is_valid():
-            form = MovieUpdateForm()
-            model.update({'title': title}, {'opening_crawl': description})
-    return render(request, "ex06/update.html", {"form": form})
+    try:
+        form = MovieUpdateForm()
+        moviesCount = len(MovieModel().list())
+        if request.method == "POST":
+            form = MovieUpdateForm(request.POST)
+            model = MovieModel()
+            title = form['title'].value()
+            description = form['description'].value()
+            if form.is_valid():
+                form = MovieUpdateForm()
+                model.update({'title': title}, {'opening_crawl': description})
+        return render(request, "ex06/update.html", {"form": form, "moviesCount": moviesCount })
+    except Exception as e:
+        return HttpResponse(e)

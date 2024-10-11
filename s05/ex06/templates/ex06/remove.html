@@ -8,8 +8,11 @@
 </head>
 <body>
     <div class="container">
+        <h1 class="mt-4">Movies List</h1>
+        {% if moviesCount == 0 %}
+            <p>No Data</p>
+        {% else %}
         <div class="card p-2" style="width: 480px">
-            <h1>Movies List</h1>
             <form action="remove" method="post">
                 {{ form }}
                 <input type="submit" value="Submit" type="button" class="btn btn-danger">
@@ -19,6 +22,7 @@
                 {% endif %}
             </form>
         </div>
+        {% endif %}
     </div>
 </body>
 </html>
