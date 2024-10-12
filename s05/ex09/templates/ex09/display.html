@@ -41,12 +41,14 @@
     <table>
         <tr>
             <th>Name</th>
+            <th>Home</th>
             <th>Climate</th>
             <th>Terrain</th>
         </tr>
         {% for people in peoples %}
         <tr>
             <td>{{ people.name }}</td>
+            <td>{{ people.homeworld.name }}</td>
             <td>{{ people.homeworld.climate }}</td>
             <td>{{ people.homeworld.terrain}}</td>
         </tr>

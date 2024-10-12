@@ -122,8 +122,9 @@ class PeopleModel(DbBaseModel):
                 {ref_tb}.name as planet_name,
                 {ref_tb}.climate as planet_climate,
                 {ref_tb}.terrain as planet_terrain
-            FROM {ths_tb}
+            FROM {ths_tb} 
             LEFT JOIN {ref_tb} ON {ths_tb}.homeworld = {ref_tb}.name
+            WHERE {ref_tb}.climate LIKE '%windy%' 
             ORDER BY {ref_tb}.climate
         """
         self.cur.execute(cmd)
