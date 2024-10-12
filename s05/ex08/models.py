@@ -119,7 +119,9 @@ class PeopleModel(DbBaseModel):
         cmd = f"""
             SELECT * FROM {ths_tb}
             LEFT JOIN {ref_tb} ON {ths_tb}.homeworld = {ref_tb}.name
+            ORDER BY {ref_tb}.climate
         """
+        self.cur.execute(cmd)
         rows = self.cur.fetchall()
         self.cur.close()
         return [ dict(r) for r in rows] 
