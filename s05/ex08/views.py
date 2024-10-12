@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -29,9 +27,8 @@ def populate(request):
         return HttpResponse(e)
 
 def display(request):
-    # try:
+    try:
         peoples = PeopleModel().list()
-        print(peoples[0])
         return render(request, "ex08/display.html", {"peoples": peoples})
-    # except Exception as e:
-    #     return HttpResponse(e)
+    except Exception as e:
+        return HttpResponse(e)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ex08 Display</title>
+    <title>Ex09 Display</title>
     <style>
         body {
             height: 100vh;
@@ -22,12 +22,21 @@
             border: 1px solid black;
             padding: 4px;
         }
+        pre {
+            border-radius: 10px;
+            background-color: #2E2E2E;
+            color: snow;
+            padding: 12px 12px 18px 18px;
+        }
     </style>
 </head>
 <body>
     <h1>People on Climate List</h1>
     {% if peoples|length == 0 %}
-        <p>No Data</p>
+        <p>No Data available, please use the following command line before use:</p>
+        <div class="card p-2">
+            <pre>$ python3 manage.py loaddata ex09/static/ex09_initial_data.json --app ex09 --format=json</pre>
+        </div>
     {% else %}
     <table>
         <tr>
@@ -37,9 +46,9 @@
         </tr>
         {% for people in peoples %}
         <tr>
-            <td>{{ people.people_name }}</td>
-            <td>{{ people.planet_climate }}</td>
-            <td>{{ people.planet_terrain}}</td>
+            <td>{{ people.name }}</td>
+            <td>{{ people.homeworld.climate }}</td>
+            <td>{{ people.homeworld.terrain}}</td>
         </tr>
         {% endfor %}
     </table>

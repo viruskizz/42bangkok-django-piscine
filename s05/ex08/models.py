@@ -117,11 +117,16 @@ class PeopleModel(DbBaseModel):
         ths_tb = self.__TABLE_NAME__
         ref_tb = PlanetModel.__TABLE_NAME__
         cmd = f"""
-            SELECT * FROM {ths_tb}
+            SELECT
+                {ths_tb}.name as people_name,
+                {ref_tb}.name as planet_name,
+                {ref_tb}.climate as planet_climate,
+                {ref_tb}.terrain as planet_terrain
+            FROM {ths_tb}
             LEFT JOIN {ref_tb} ON {ths_tb}.homeworld = {ref_tb}.name
             ORDER BY {ref_tb}.climate
         """
         self.cur.execute(cmd)
         rows = self.cur.fetchall()
         self.cur.close()
-        return [ dict(r) for r in rows] 
+        return [ dict(r) for r in rows]
