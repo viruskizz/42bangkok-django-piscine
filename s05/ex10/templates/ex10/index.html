@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Ex10</title>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            align-self: center;
+            border-collapse: collapse;
+        }
+        table tr td,th {
+            border: 1px solid black;
+            padding: 4px;
+        }
+        pre {
+            border-radius: 10px;
+            background-color: #2E2E2E;
+            color: snow;
+            padding: 12px 12px 18px 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Movies Search</h1>
+        <div class="card p-2 my-3 mx-auto" style="width: 480px">
+            <form action="" method="post">
+                {{ form }}
+                <input type="submit" value="Submit" type="button" class="btn btn-primary">
+                {% csrf_token %}
+            </form>
+        </div>
+        {% if peoples|length == 0 %}
+        <h3 class="text-center">Nothing corresponding to your research</h3>
+        {% else %}
+        <table class="table">
+            <thead class="table-info">
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Film Title</th>
+                    <th>Homeworld's name</th>
+                    <th>Homeworld's diameter</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for people in peoples %}
+                <tr>
+                    <td>{{ people.name }}</td>
+                    <td>{{ people.gender }}</td>
+                    <td>{{ people.movie_title }}</td>
+                    <td>{{ people.homeworld_name }}</td>
+                    <td>{{ people.homeworld_diameter }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</body>
+</html>
