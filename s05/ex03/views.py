@@ -10,15 +10,20 @@ data = [
     {'episode_nb': 4, 'title': 'A New Hope', 'director': 'George Lucas', 'producer': 'Gary Kurtz, Rick McCallum', 'release_date': '1977-05-25'},
     {'episode_nb': 5, 'title': 'The Empire Strikes Back', 'director': 'Irvin Kershner', 'producer': 'Gary Kurtz, Rick McCallum', 'release_date': '1980-05-17'},
     {'episode_nb': 6, 'title': 'Return of the Jedi', 'director': 'Richard Marquand', 'producer': 'Howard G. Kazanjian, George Lucas, Rick McCallum', 'release_date': '1983-05-25'},
-    {'episode_nb': 7, 'title': 'The Force Awakens', 'director': 'J. J. Abrams', 'producer': 'Kathleen Kennedy, J. J. Abrams, Bryan Burk', 'release_date': '2015-12-11'}
+    {'episode_nb': 7, 'title': 'The Force Awakens', 'director': 'J. J. Abrams', 'producer': 'Kathleen Kennedy, J. J. Abrams, Bryan Burk', 'release_date': '2015-12-11'},
 ]
 # Create your views here.
 def populate(request):
+    results = []
     try:
         for d in data:
             movie = Movies(**d)
-            movie.save()
-        return HttpResponse("OK")
+            try:
+                movie.save()
+                results.append({'title': d['title'], 'status': True, 'message': 'OK'})
+            except Exception as e:
+                results.append({'title': d['title'], 'status': False, 'message': e})
+        return render(request, "ex03/populate.html", {"results": results})
     except Exception as e:
         return HttpResponse(e)
 
