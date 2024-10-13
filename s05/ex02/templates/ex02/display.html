@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ex02 Display</title>
+    <title>Ex06 Display</title>
     <style>
         body {
             height: 100vh;
@@ -26,7 +26,7 @@
 </head>
 <body>
     <h1>Movie List</h1>
-    {% if rows|length == 0 %}
+    {% if movies|length == 0 %}
         <p>No Data</p>
     {% else %}
     <table>
@@ -38,14 +38,14 @@
             <th>Producer</th>
             <th>Release Date</th>
         </tr>
-        {% for record in rows %}
+        {% for movie in movies %}
         <tr>
-            <td>{{ record.0 }}</td>
-            <td>{{ record.1 }}</td>
-            <td>{{ record.2|default_if_none:"-" }}</td>
-            <td>{{ record.3 }}</td>
-            <td>{{ record.4 }}</td>
-            <td>{{ record.5|date:"SHORT_DATE_FORMAT" }}</td>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.episode_nb }}</td>
+            <td>{{ movie.opening_crawl|default_if_none:"-" }}</td>
+            <td>{{ movie.director }}</td>
+            <td>{{ movie.producer }}</td>
+            <td>{{ movie.release_date|date:"SHORT_DATE_FORMAT" }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -18,38 +18,10 @@ class MovieModel:
                 opening_crawl TEXT,
                 director VARCHAR(32) NOT NULL,
                 producer VARCHAR(128) NOT NULL,
-                release_date DATE NOT NULL,
-                created TIMESTAMP NOT NULL,
-                updated TIMESTAMP NOT NULL
+                release_date DATE NOT NULL
             )
         """
-        create_func_created_cmd = f"""
-            CREATE OR REPLACE FUNCTION create_changetimestamp_column()
-            RETURNS TRIGGER AS $$
-            BEGIN
-                NEW.created = now();
-                NEW.updated = now();
-                RETURN NEW;
-            END
-            $$ language 'plpgsql';
-            CREATE TRIGGER create_changetimestamp_column BEFORE INSERT
-            ON {self.__TABLE_NAME__} FOR EACH ROW EXECUTE PROCEDURE
-            create_changetimestamp_column();
-        """
-        create_func_updated_cmd = f"""
-            CREATE OR REPLACE FUNCTION update_changetimestamp_column()
-            RETURNS TRIGGER AS $$
-            BEGIN
-                NEW.updated = now();
-                NEW.created = OLD.created;
-                RETURN NEW;
-            END;
-            $$ language 'plpgsql';
-            CREATE TRIGGER update_films_changetimestamp BEFORE UPDATE
-            ON {self.__TABLE_NAME__} FOR EACH ROW EXECUTE PROCEDURE
-            update_changetimestamp_column();
-        """
-        exec_commands([create_table_cmd, create_func_created_cmd, create_func_updated_cmd])
+        exec_commands([create_table_cmd])
 
     def get(self, where: dict):
         wherer = self.dict_to_setter(where)
