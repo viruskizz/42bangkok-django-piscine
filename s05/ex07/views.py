@@ -16,13 +16,15 @@ data = [
 ]
 # Create your views here.
 def populate(request):
-    try:
-        for d in data:
-            movie = Movies(**d)
+    results = []
+    for d in data:
+        movie = Movies(**d)
+        try:
             movie.save()
-        return HttpResponse("OK")
-    except Exception as e:
-        return HttpResponse(e)
+            results.append({'title': d['title'], 'status': True, 'message': 'OK'})
+        except Exception as e:
+            results.append({'title': d['title'], 'status': False, 'message': e})
+    return render(request, "ex03/populate.html", {"results": results})
 
 def display(request):
     try:
