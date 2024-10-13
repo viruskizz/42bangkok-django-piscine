@@ -23,11 +23,10 @@ def populate(request):
         {'episode_nb': 7, 'title': 'The Force Awakens', 'director': 'J. J. Abrams', 'producer': 'Kathleen Kennedy, J. J. Abrams, Bryan Burk', 'release_date': '2015-12-11'}
     ]
     try:
-        MovieModel().bulk_insert(data)
-        return HttpResponse("OK")
+        results = MovieModel().bulk_insert(data)
+        return render(request, "ex06/populate.html", {"results": results})
     except Exception as e:
         return HttpResponse(e)
-
 def display(request):
     try:
         movies = MovieModel().list()

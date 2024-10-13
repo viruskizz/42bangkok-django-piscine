@@ -61,18 +61,27 @@ class MovieModel:
         return selected
 
     def list(self):
-        self.cur.execute(f"SELECT * FROM {self.__TABLE_NAME__}")
-        rows = self.cur.fetchall()
-        self.cur.close()
-        return [ dict(r) for r in rows]
+        try:
+            self.cur.execute(f"SELECT * FROM {self.__TABLE_NAME__}")
+            rows = self.cur.fetchall()
+            self.cur.close()
+            return [ dict(r) for r in rows]
+        except Exception as e:
+            print(e)
+            return []
 
-    def bulk_insert(self, data: dict):
+    def bulk_insert(self, data: list):
         fields = list(data[0].keys())
-        cmds = []
+        results = []
         for d in data:
             cmd = f"INSERT INTO {self.__TABLE_NAME__} ({','.join(fields)}) VALUES {tuple(d.values())}"
-            cmds.append(cmd)
-        exec_commands(cmds)
+            try:
+                self.cur.execute(cmd)
+                results.append({'title': d['title'], 'status': True, 'message': 'OK'})
+            except Exception as e:
+                results.append({'title': d['title'], 'status': False, 'message': str(e)})
+            self.conn.commit()
+        return results
 
     def update(self, where: dict, data: dict):
         setter = self.dict_to_setter(data)
