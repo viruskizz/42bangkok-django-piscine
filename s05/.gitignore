@@ -1,5 +1,5 @@
 django_*
 __pycache__
 data
-!*/migrates/__init__.py
-*/migrates/*.py
+!*/migrations/__init__.py
+*/migrations/*.py
