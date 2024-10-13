@@ -2,6 +2,8 @@ from typing import Any
 from django.db import models
 from . import connect, exec_commands
 from psycopg2.extras import RealDictCursor
+from django.conf import settings
+import os
 
 class DbBaseModel:
     __TABLE_NAME__ = None
@@ -13,13 +15,6 @@ class DbBaseModel:
 
     def setup(self):
         pass
-
-    def data_null_covert(data: list):
-        d = []
-        for values in data:
-            values = [ None if v == 'NULL' else v for v in values ]
-            d.append(values)
-        return d
 
     def get(self, where: dict):
         wherer = self.dict_to_setter(where)
@@ -45,10 +40,17 @@ class DbBaseModel:
             self.cur.execute(cmd, d)
         self.conn.commit()
 
-    def bulk(self, data: list):
-        cmd = f"INSERT INTO {self.__TABLE_NAME__} ({', '.join(self.__FIELDS__)}) VALUES "
-        cmd += f"{','.join([str(tuple(v)) for v in data])}"
-        exec_commands([cmd])
+    def bulk_from_file(self, filename: str, fields: list):
+        filename = os.path.join(settings.BASE_DIR, "ex08", filename)
+        try:
+            f = open(filename, "r")
+            self.cur.copy_from(f, table=self.__TABLE_NAME__, null='NULL', columns=fields)
+            self.conn.commit()
+            self.conn.close()
+            f.close()
+            return {'status': True, 'message': 'OK'}
+        except Exception as e:
+            return {'status': False, 'message': e}
 
     def update(self, where: dict, data: dict):
         setter = self.dict_to_setter(data)
@@ -64,13 +66,6 @@ class DbBaseModel:
         self.cur.execute(cmd)
         self.conn.commit()
         self.cur.close()
-
-    def dict_to_setter(self, dt: dict) -> str:
-        ss = ','.join([f"{key} = '{val}'" for key, val in dt.items()])
-        return ss
-    
-    def load_data(filename: str):
-        pass
 
 # Create your models here.
 class PlanetModel(DbBaseModel):
