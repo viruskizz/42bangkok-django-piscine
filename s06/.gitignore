@@ -1,0 +1,4 @@
+django_*
+__pycache__
+*.log
+data
