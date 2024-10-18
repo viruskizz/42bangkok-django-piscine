@@ -1,0 +1,19 @@
+<!-- sign-in.html -->
+{% extends "ex/base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="card" style="width: 360px; border: 0">
+    <div class="card-body">
+      <h1>Login</h1>
+      <form method="POST" action="{% url 'login' %}">
+          {{ form }}
+          {% csrf_token %}  
+          <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
