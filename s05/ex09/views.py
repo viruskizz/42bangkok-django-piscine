@@ -10,12 +10,6 @@ def init(request):
     except Exception as e:
         return HttpResponse(e)
 
-def populate(request):
-    try:
-        return HttpResponse("OK")
-    except Exception as e:
-        return HttpResponse(e)
-
 def display(request):
     try:
         peoples = People.objects.filter(homeworld__climate__contains = 'windy').order_by('name')

@@ -32,13 +32,13 @@
     <table>
         <tr>
             <th>Name</th>
-            <th>Climate</th>
+            <th>Planet</th>
             <th>Terrain</th>
         </tr>
         {% for people in peoples %}
         <tr>
             <td>{{ people.people_name }}</td>
-            <td>{{ people.planet_climate }}</td>
+            <td>{{ people.planet_name }}</td>
             <td>{{ people.planet_terrain}}</td>
         </tr>
         {% endfor %}

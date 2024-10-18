@@ -57,7 +57,6 @@ class Movies(models.Model):
     release_date = models.DateField()
     characters = models.ManyToManyField(
         People,
-        null=True,
         related_name="characters",
         db_constraint=False
     )

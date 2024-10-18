@@ -24,7 +24,7 @@ def populate(request):
             results.append({'title': d['title'], 'status': True, 'message': 'OK'})
         except Exception as e:
             results.append({'title': d['title'], 'status': False, 'message': e})
-    return render(request, "ex03/populate.html", {"results": results})
+    return render(request, "ex07/populate.html", {"results": results})
 
 def display(request):
     try:
